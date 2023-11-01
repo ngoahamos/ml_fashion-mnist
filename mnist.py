@@ -2,6 +2,8 @@ import tensorflow as tf
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
+from mycallback import MyCallback
+
 
 data = tf.keras.datasets.fashion_mnist
 (training_images,training_labels), (test_images,test_labels) = data.load_data()
@@ -15,7 +17,9 @@ output_layer = Dense(10, activation=tf.nn.softmax)
 model = Sequential([input_layer, hidden_layer, output_layer])
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-model.fit(training_images, training_labels, epochs=5)
+callback = MyCallback()
+
+model.fit(training_images, training_labels, epochs=50, callbacks = [callback])
 print("About to test model with test data")
 model.evaluate(test_images, test_labels)
 print("Let's make prediction with the model")
